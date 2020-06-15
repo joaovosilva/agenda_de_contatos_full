@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Users;
+use App\Models\Users;
 
 /**
  * Interface UsersRepository.
