@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', ['as' => "login", 'uses' => 'AuthController@indexLogin']);
+Route::get('/contacts/create', ['as' => "contacts-form", 'uses' => 'ContactsController@contactForm']);
+Route::get('/contacts/{id}', ['as' => "contacts-user", 'uses' => 'ContactsController@getUserContacts']);
+Route::post('/contacts', ['as' => "store-contact", 'uses' => 'ContactsController@registerContact']);
+
 Auth::routes();
-Route::get('/contacts/{id}', ['as' => "contacts.user", 'uses' => 'ContactsController@getUserContacts']);
-Route::get('/contacts/{id}/form', ['as' => "contacts.form", 'uses' => 'ContactsController@contactForm']);
+
+Route::get('/home', 'HomeController@index')->name('home');

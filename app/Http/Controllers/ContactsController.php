@@ -72,10 +72,6 @@ class ContactsController extends Controller
     // register a contact
     public function registerContact(ContactsRequest $request)
     {
-        if (!ResponseService::validationUser()) {
-            return ResponseService::returnApi(false, null, "Autenticação Invállida");
-        }
-
         if (isset($request->contact_id)) {
             $contactsExists = $this->contactsService->find($request->contact_id);
             $request->contact_id = $contactsExists->contact_id;

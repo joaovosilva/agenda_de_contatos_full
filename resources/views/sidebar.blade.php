@@ -7,8 +7,8 @@
                     <h2>Menu</h2>
                 </header>
                 <ul>
-                    <li><a href="{{route('contacts.user', 1)}}">Meus Contatos</a></li>
-                    <li><a href="{{route('contacts.form', 1)}}">Novo Contato</a></li>
+                    <li><a href="{{route('contacts-user', 1)}}">Meus Contatos</a></li>
+                    <li><a href="{{route('contacts-form')}}">Novo Contato</a></li>
                     <li><a @click="logout">Logout</a></li>
                     <!-- <li><a href="">Generic</a></li>
                                 <li><a href="elements.php">Elements</a></li>

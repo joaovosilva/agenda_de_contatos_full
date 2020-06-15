@@ -47,18 +47,18 @@
                     <div class="formulario">
                         <form method="POST" action="{{ route('login') }} class="form-login">
                             <div class="form-group">
-                                <label for="emailLogin" class="">Email: </label>
-                                <input id="email" name="emailLogin" placeholder="Email..." ref="emailLogin" type="text"
+                                <label for="email" class="">Email: </label>
+                                <input id="email" name="email" placeholder="Email..." ref="email" type="text"
                                     class="form-control" value="" autocomplete="off">
                             </div>
                             <div class="form-group">
-                                <label for="passwordLogin" class="">Senha: </label>
-                                <input id="password" name="passwordLogin" placeholder="Senha..." ref="passwordLogin" type="password"
+                                <label for="password" class="">Senha: </label>
+                                <input id="password" name="password" placeholder="Senha..." ref="password" type="password"
                                     class="form-control" value="" autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <button
-                                    class="align-self-end button-gradient float-right btn btn-secondary">Conectar</button>
+                                    class="align-self-end button-gradient float-right btn btn-secondary">{{ __('Login') }}</button>
                             </div>
                         </form>
                     </div>
