@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Addresses;
+use App\Models\Addresses;
 
 /**
  * Interface AddressesRepository.
@@ -28,23 +28,10 @@ class AddressesRepository
         return $this->addresses->all();
     }
 
-    /**
-     * Creating or update resource.
-     *
-     * @return Address
-     */
-    public function save($data)
+    public function store($data, $contactFk)
     {
         $address = null;
         $address = new Addresses();
-
-        if (isset($data['address_id'])) {
-            $address = Addresses::find($data['address_id']);
-        }
-
-        if (!$address) {
-            return false;
-        }
 
         $address->zip_code = $data['zip_code'];
         $address->street = $data['street'];
@@ -55,7 +42,7 @@ class AddressesRepository
         }
         $address->city = $data['city'];
         $address->state = $data['state'];
-        $address->contact_fk = $data['contact_fk'];
+        $address->contact_fk = $contactFk;
         $address->save();
 
         return $address;

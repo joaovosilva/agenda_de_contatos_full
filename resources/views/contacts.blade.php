@@ -2,7 +2,7 @@
 
 @section('content')
 <script>
-	let contacts = @json($contacts);
+	let contacts = @json($contacts ?? []);
 </script>
 
 <div class="inner">
@@ -19,8 +19,9 @@
 				<h3>Meus contatos</h3>
 			</header>
 			<ul class="actions" style="justify-content: flex-end;">
-				<li><a href="contacts.php"><button class=" button icon solid fa-plus">Novo</button></a></li>
+				<li><a href="{{route('contacts.create')}}"><button class="button icon solid fa-plus">Novo</button></a></li>
 			</ul>
+			@include('flash-message');
 			<div class="table-wrapper">
 				<table id="contactsTable" class="table table-bordered">
 					<thead>

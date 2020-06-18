@@ -40,16 +40,16 @@ function loadDataTable() {
             name: v.name,
             company: v.company,
             role: v.role,
-            phone: v.phones[0].phone,
+            phone: v.phones[0] ? v.phones[0].phone : '',
             options: `<div>
                         <div class="input-group-btn">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                 <span class="fa fa-th"></span>
                             </button>
                             <ul class="dropdown-menu" style="    transform: translate3d(800px, 170px, 0px) !important;">
-                                <!--<li><a href="javascript:void(0)" onclick="vueIndex.visualizeContact(`+ v.contact_id +`)">Visualizar</a></li>-->
-                                <li><a href="contacts.php?contact_id=`+ v.contact_id +`">Visualizar</a></li>
-                                <li><a href="javascript:void(0)" onclick="vueIndex.deleteContact(`+ v.contact_id +`)">Excluir</a></li>
+                                <!--<li><a href="javascript:void(0)" onclick="visualizeContact(`+ v.contact_id +`)">Visualizar</a></li>-->
+                                <li><a href="/contacts/`+ v.contact_id +`">Editar</a></li>
+                                <li><a method="post" href="/contacts/`+ v.contact_id +`/delete">Excluir</a></li>
                             </ul>
                         </div>
                     </div>`,

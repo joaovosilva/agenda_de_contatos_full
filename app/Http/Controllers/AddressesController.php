@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Addresses;
+use App\Models\Addresses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Services\UsersService;

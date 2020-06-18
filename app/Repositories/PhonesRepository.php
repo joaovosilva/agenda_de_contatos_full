@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Phones;
+use App\Models\Phones;
 
 /**
  * Interface PhonesRepository.
@@ -28,27 +28,14 @@ class PhonesRepository
         return $this->phones->all();
     }
 
-    /**
-     * Creating or update resource.
-     *
-     * @return Phone
-     */
-    public function save($data)
+    public function store($data, $contactFk)
     {
         $phone = null;
         $phone = new Phones();
 
-        if (isset($data['phone_id'])) {
-            $phone = $this->phones->find($data['phone_id']);
-        }
-
-        if (!$phone) {
-            return false;
-        }
-
         $phone->phone = $data['phone'];
         $phone->type = $data['type'];
-        $phone->contact_fk = $data['contact_fk'];
+        $phone->contact_fk = $contactFk;
         $phone->save();
 
         return $phone;

@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Repositories\AddressesRepository;
 use App\Services\Contracts\AddressesInterface;
-use App\Addresses;
+use App\Models\Addresses;
 
 class AddressesService implements AddressesInterface
 {
@@ -52,10 +52,10 @@ class AddressesService implements AddressesInterface
         return $addresses;
     }
 
-    public function storeOrUpdate($request)
+    public function store($request, $contactFk)
     {
         try {
-            $address = $this->addressesRepository->save($request);
+            $address = $this->addressesRepository->store($request, $contactFk);
         } catch (Throwable $e) {
             return $e;
         }

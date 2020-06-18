@@ -4,7 +4,8 @@ namespace App\Services;
 
 use App\Repositories\ContactsRepository;
 use App\Services\Contracts\ContactsInterface;
-use App\Contacts;
+use App\Models\Contacts;
+use Illuminate\Support\Facades\Auth;
 
 class ContactsService implements ContactsInterface
 {
@@ -52,10 +53,26 @@ class ContactsService implements ContactsInterface
         return $contacts;
     }
 
-    public function storeOrUpdate($request)
+    public function store($request)
+    {
+
+        try {
+            $id = Auth::id();
+
+            $contact = $this->contactsRepository->store($request, $id);
+        } catch (Throwable $e) {
+            return $e;
+        }
+
+        return $contact;
+    }
+
+    public function update($request, $contactId)
     {
         try {
-            $contact = $this->contactsRepository->save($request);
+            $id = Auth::id();
+            
+            $contact = $this->contactsRepository->update($request, $contactId, $id);
         } catch (Throwable $e) {
             return $e;
         }

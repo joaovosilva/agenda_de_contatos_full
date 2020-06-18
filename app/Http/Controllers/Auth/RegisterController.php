@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
-use App\Models\Users;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
+use App\Models\Users;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Support\Facades\Validator;
+use App\Services\EmailService;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
 {
+    use RegistersUsers;
+
     /*
     |--------------------------------------------------------------------------
     | Register Controller
@@ -23,7 +25,7 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
+
 
     /**
      * Where to redirect users after registration.
@@ -31,14 +33,16 @@ class RegisterController extends Controller
      * @var string
      */
     protected $redirectTo = RouteServiceProvider::HOME;
+    protected $emailService;
 
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(EmailService $emailService)
     {
+        $this->emailService = $emailService;
         $this->middleware('guest');
     }
 
@@ -65,6 +69,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $this->emailService->welcomeEmail($data);
         return Users::create([
             'name' => $data['name'],
             'email' => $data['email'],

@@ -7,9 +7,10 @@
                     <h2>Menu</h2>
                 </header>
                 <ul>
-                    <li><a href="{{route('contacts-user', 1)}}">Meus Contatos</a></li>
-                    <li><a href="{{route('contacts-form')}}">Novo Contato</a></li>
-                    <li><a @click="logout">Logout</a></li>
+                    <li><a href="{{route('contacts.index')}}">Meus Contatos</a></li>
+                    <li><a href="{{route('contacts.create')}}">Novo Contato</a></li>
+                    <li><a onclick="event.preventDefault();
+                            document.getElementById('logout-form').submit();">Logout</a></li>
                     <!-- <li><a href="">Generic</a></li>
                                 <li><a href="elements.php">Elements</a></li>
                                 <li>
@@ -36,6 +37,10 @@
                     <li class="icon solid fa-home">Franca - SP
                 </ul>
             </section>
+
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
 
             <!-- Footer
                         <footer id="footer">

@@ -9,7 +9,12 @@
     <link rel="stylesheet" href="{{asset('assets/css/bootstrap.min.css')}}" />
     <link rel="stylesheet" href="{{asset('assets/css/jquery.dataTables.min.css')}}" />
     <script src="{{asset('assets/js/jquery.min.js')}}"></script>
+    <script src="{{asset('assets/js/popper.min.js')}}"></script>
+    <script src="{{asset('assets/js/bootstrap.min.js')}}"></script>
     <script src="{{asset('assets/js/jquery.dataTables.min.js')}}"></script>
+    <noscript>
+
+    </noscript>
     <title>@yield('title')</title>
 </head>
 
@@ -24,10 +29,10 @@
         @include('sidebar')
     </div>
 
-    <script src="{{asset('assets/js/browser.min.js')}}"></script>
     <script src="{{asset('assets/js/breakpoints.min.js')}}"></script>
-    <script src="{{asset('assets/js/util.js')}}"></script>
+    <script src="{{asset('assets/js/browser.min.js')}}"></script>
     <script src="{{asset('assets/js/main.js')}}"></script>
+    <script src="{{asset('assets/js/util.js')}}"></script>
 </body>
 
 </html>

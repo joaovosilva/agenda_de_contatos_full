@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Phones;
+use App\Models\Phones;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 

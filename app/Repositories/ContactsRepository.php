@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Contacts;
+use App\Models\Contacts;
 
 /**
  * Interface ContactsRepository.
@@ -28,26 +28,30 @@ class ContactsRepository
         return $this->contacts->all();
     }
 
-    /**
-     * Creating or update resource.
-     *
-     * @return Contact
-     */
-    public function save($request)
+    public function store($request, $userFk)
     {
         $contact = null;
         $contact = new Contacts();
 
-        if ($request->contact_id != null && $request->contact_id != "") {
-            $contact = $this->contacts->find($request->id);
-        }
+        $contact->name = $request->name;
+        $contact->user_fk = $userFk;
+        $contact->company = $request->company;
+        $contact->role = $request->role;
+        $contact->save();
+
+        return $contact;
+    }
+
+    public function update($request, $contactId, $userFk)
+    {
+        $contact = $this->contacts->find($contactId);
 
         if (!$contact) {
-            return false;
+            return back()->with('error', 'Contato não encontrado');
         }
 
         $contact->name = $request->name;
-        $contact->user_fk = $request->user_fk;
+        $contact->user_fk = $userFk;
         $contact->company = $request->company;
         $contact->role = $request->role;
         $contact->save();

@@ -46,6 +46,7 @@
                     </a>
                     <div class="formulario">
                         <form method="POST" action="{{ route('login') }} class="form-login">
+                            @csrf
                             <div class="form-group">
                                 <label for="email" class="">Email: </label>
                                 <input id="email" name="email" placeholder="Email..." ref="email" type="text"

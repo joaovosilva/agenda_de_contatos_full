@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Repositories\PhonesRepository;
 use App\Services\Contracts\PhonesInterface;
-use App\Phones;
+use App\Models\Phones;
 
 class PhonesService implements PhonesInterface
 {
@@ -52,10 +52,10 @@ class PhonesService implements PhonesInterface
         return $phones;
     }
 
-    public function storeOrUpdate($request)
+    public function store($request, $contactFk)
     {
         try {
-            $phone = $this->phonesRepository->save($request);
+            $phone = $this->phonesRepository->store($request, $contactFk);
         } catch (Throwable $e) {
             return $e;
         }

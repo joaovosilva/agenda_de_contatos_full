@@ -25,9 +25,9 @@ class ContactsRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'user_fk' => 'required',
-            'phones' => 'required',
-            'addresses' => 'required'
+            // 'user_fk' => 'required',
+            // 'phones' => 'required',
+            // 'addresses' => 'required'
         ];
     }
 

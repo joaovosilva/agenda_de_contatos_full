@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Contacts;
+use App\Models\Contacts;
 use App\Http\Requests\ContactsRequest;
 use App\Services\AddressesService;
 use App\Services\ContactsService;
+use App\Services\EmailService;
 use App\Services\PhonesService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ContactsController extends Controller
@@ -15,24 +17,25 @@ class ContactsController extends Controller
     protected $contactsService;
     protected $phonesService;
     protected $addressesService;
+    protected $emailService;
 
     public function __construct(
         ContactsService $contactsService,
         PhonesService $phonesService,
-        AddressesService $addressesService
+        AddressesService $addressesService,
+        EmailService $emailService
     ) {
         $this->contactsService = $contactsService;
         $this->phonesService = $phonesService;
         $this->addressesService = $addressesService;
+        $this->emailService = $emailService;
+        $this->middleware('auth');
     }
 
-    public function getContactById($id)
+
+
+    public function show($id, $returnView = false)
     {
-
-        if (!ResponseService::validationUser()) {
-            return ResponseService::returnApi(false, null, "Autenticação Invállida");
-        }
-
         $contact = $this->contactsService->find($id);
 
         if (!$contact) {
@@ -46,15 +49,20 @@ class ContactsController extends Controller
         $contact->phones = $phones;
         $contact->addresses = $addresses;
 
-        return ResponseService::returnApi(true, $contact, null);
+        if (!$returnView) {
+            return view('contact-form', compact('contact'));
+        }
+
+        return $contact;
     }
 
-    public function getUserContacts($id)
+    public function index()
     {
+        $id = Auth::id();
         $contacts = $this->contactsService->searchContacts($id);
 
         if (!$contacts) {
-            return ResponseService::returnApi(true, null, "Contato não encontrado");
+            return back()->with('warning', 'Contatos não encontrados');
         }
 
         foreach ($contacts as $contact) {
@@ -69,34 +77,60 @@ class ContactsController extends Controller
         return view('contacts', compact('contacts'));
     }
 
-    // register a contact
-    public function registerContact(ContactsRequest $request)
+    public function store(ContactsRequest $request)
     {
-        if (isset($request->contact_id)) {
-            $contactsExists = $this->contactsService->find($request->contact_id);
-            $request->contact_id = $contactsExists->contact_id;
+        try {
+            $contact = $this->contactsService->store($request);
+
+            $phoneArray = [];
+            foreach ($request->phones as $phone) {
+                $newPhone = $this->phonesService->store($phone, $contact->contact_id);
+                array_push($phoneArray, $newPhone);
+            }
+
+            $addressArray = [];
+            foreach ($request->addresses as $address) {
+                $newAddress = $this->addressesService->store($address, $contact->contact_id);
+                array_push($addressArray, $newAddress);
+            }
+
+            $contact->phones = $phoneArray;
+            $contact->addresses = $addressArray;
+        } catch (Throwable $e) {
+            return back()->with('error', $e);
         }
 
-        $contact = $this->contactsService->storeOrUpdate($request);
 
-        $phoneArray = [];
-        foreach ($request->phones as $phone) {
-            $phone['contact_fk'] = $contact->contact_id;
-            $newPhone = $this->phonesService->storeOrUpdate($phone);
-            array_push($phoneArray, $newPhone);
+        return redirect()->route('contacts.index')->with('success', 'salvo com sucesso!');
+    }
+
+    public function update(ContactsRequest $request, $id)
+    {
+        try {
+            $contact = $this->contactsService->update($request, $id);
+
+            $phoneArray = [];
+            $this->phonesService->deleteContactPhones($contact->contact_id);
+            foreach ($request->phones as $phone) {
+                $newPhone = $this->phonesService->store($phone, $contact->contact_id);
+                array_push($phoneArray, $newPhone);
+            }
+
+            $addressArray = [];
+            $this->addressesService->deleteContactAddresses($contact->contact_id);
+            foreach ($request->addresses as $address) {
+                $newAddress = $this->addressesService->store($address, $contact->contact_id);
+                array_push($addressArray, $newAddress);
+            }
+
+            $contact->phones = $phoneArray;
+            $contact->addresses = $addressArray;
+        } catch (Throwable $e) {
+            return back()->with('error', $e);
         }
 
-        $addressArray = [];
-        foreach ($request->addresses as $address) {
-            $address['contact_fk'] = $contact->contact_id;
-            $newAddress = $this->addressesService->storeOrUpdate($address);
-            array_push($addressArray, $newAddress);
-        }
 
-        $contact->phones = $phoneArray;
-        $contact->addresses = $addressArray;
-
-        return ResponseService::returnApi(true, $contact);
+        return redirect()->route('contacts.index')->with('success', 'salvo com sucesso!');
     }
 
     /**
@@ -108,14 +142,10 @@ class ContactsController extends Controller
      */
     public function deleteContact($id)
     {
-        if (!ResponseService::validationUser()) {
-            return ResponseService::returnApi(false, null, "Autenticação Invállida");
-        }
-
         $contact = $this->contactsService->find($id);
 
         if (!$contact) {
-            return ResponseService::returnApi(false, null, "Contato não encontrado");
+            return "Contato não encontrado";
         }
 
         $this->phonesService->deleteContactPhones($id);
@@ -124,10 +154,10 @@ class ContactsController extends Controller
 
         $this->contactsService->deleteContact($id);
 
-        return ResponseService::returnApi(true, null, "Contato excluido com sucesso");
+        return redirect()->route('contacts.index')->with('success', 'deletado com sucesso!');
     }
 
-    public function contactForm()
+    public function create()
     {
         return view('contact-form');
     }
