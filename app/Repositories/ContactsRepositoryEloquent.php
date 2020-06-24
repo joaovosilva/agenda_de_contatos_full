@@ -2,10 +2,9 @@
 
 namespace App\Repositories;
 
-use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\ContactsRepository;
-use App\Entities\Contacts;
+use App\Repositories\Contracts\ContactsRepository;
+use App\Models\Contacts;
 use App\Validators\ContactsValidator;
 
 /**
@@ -13,7 +12,7 @@ use App\Validators\ContactsValidator;
  *
  * @package namespace App\Repositories;
  */
-class ContactsRepositoryEloquent extends BaseRepository implements ContactsRepository
+class ContactsRepositoryEloquent extends BaseRepositoryEloquent implements ContactsRepository
 {
     /**
      * Specify Model class name
@@ -25,14 +24,10 @@ class ContactsRepositoryEloquent extends BaseRepository implements ContactsRepos
         return Contacts::class;
     }
 
-    
-
-    /**
-     * Boot up the repository, pushing criteria
-     */
-    public function boot()
+    public function getUserContacts($userId)
     {
-        $this->pushCriteria(app(RequestCriteria::class));
+        return $this->model
+        ->where('user_fk', $userId)
+        ->get();
     }
-    
 }

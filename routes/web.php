@@ -15,10 +15,12 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', ['as' => "login", 'uses' => 'ContactsController@index']);
+
 Route::resource('contacts', 'ContactsController');
-Route::get('/contacts/{id}/delete', ['as' => "delete-contact", 'uses' => 'ContactsController@deleteContact']);
+Route::get('/contacts/{id}/delete', ['as' => "delete-contact", 'uses' => 'ContactsController@destroy']);
 
 Route::get('/user/sendWelcome', ['as' => "welcome-email", 'uses' => 'EmailController@welcomeEmail']);
+Route::get('/testMail', 'ContactsController@testMail');
 
 Auth::routes();
 

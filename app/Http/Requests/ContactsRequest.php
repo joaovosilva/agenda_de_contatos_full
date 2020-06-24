@@ -2,10 +2,13 @@
 
 namespace App\Http\Requests;
 
+use App\Http\Requests\Traits\SanitizesInput;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ContactsRequest extends FormRequest
 {
+    use SanitizesInput;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -25,9 +28,8 @@ class ContactsRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            // 'user_fk' => 'required',
-            // 'phones' => 'required',
-            // 'addresses' => 'required'
+            'phones' => 'required',
+            'addresses' => 'required'
         ];
     }
 
@@ -39,10 +41,9 @@ class ContactsRequest extends FormRequest
     public function filters()
     {
         return [
-            'name' => 'trim_null',
-            'user_fk' => 'trim_null',
-            'phones' => 'trim_null',
-            'addresses' => 'trim_null',
+            'name' => 'trim_null|cast:string',
+            'company' => 'trim_null|cast:string',
+            'role' => 'trim_null|cast:string'
         ];
     }
 }

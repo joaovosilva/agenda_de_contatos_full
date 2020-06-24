@@ -6,17 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Addresses extends Model
 {
-    protected $table = "tb_addresses";
-    protected $primaryKey = "address_id";
+    protected $table = 'tb_addresses';
+    protected $primaryKey = 'address_id';
 
     protected $fillable = [
-        "zip_code",
-        "street",
-        "number",
-        "neighborhood",
-        "complement",
-        "state",
-        "contact_fk",
+        'zip_code',
+        'street',
+        'number',
+        'neighborhood',
+        'complement',
+        'city',
+        'state',
+        'contact_fk',
     ];
 
     public function contato()

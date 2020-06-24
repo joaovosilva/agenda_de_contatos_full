@@ -2,10 +2,9 @@
 
 namespace App\Repositories;
 
-use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\PhonesRepository;
-use App\Entities\Phones;
+use App\Repositories\Contracts\PhonesRepository;
+use App\Models\Phones;
 use App\Validators\PhonesValidator;
 
 /**
@@ -13,7 +12,7 @@ use App\Validators\PhonesValidator;
  *
  * @package namespace App\Repositories;
  */
-class PhonesRepositoryEloquent extends BaseRepository implements PhonesRepository
+class PhonesRepositoryEloquent extends BaseRepositoryEloquent implements PhonesRepository
 {
     /**
      * Specify Model class name
@@ -25,7 +24,19 @@ class PhonesRepositoryEloquent extends BaseRepository implements PhonesRepositor
         return Phones::class;
     }
 
-    
+    public function getContactPhones($contactId)
+    {
+        return $this->model
+        ->where('contact_fk', $contactId)
+        ->get();
+    }
+
+    public function deleteContactPhones($contactId)
+    {
+        return $this->model
+        ->where('contact_fk', $contactId)
+        ->delete();
+    }
 
     /**
      * Boot up the repository, pushing criteria
@@ -34,5 +45,4 @@ class PhonesRepositoryEloquent extends BaseRepository implements PhonesRepositor
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
-    
 }

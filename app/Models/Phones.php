@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Phones extends Model
 {
-    protected $table = "tb_phones";
-    protected $primaryKey = "phone_id";
+    protected $table = 'tb_phones';
+    protected $primaryKey = 'phone_id';
 
     protected $fillable = [
-        "phone",
-        "type",
-        "contact_fk"
+        'phone',
+        'type',
+        'contact_fk'
     ];
 
     public function contato()

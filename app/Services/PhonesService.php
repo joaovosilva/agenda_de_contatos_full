@@ -2,9 +2,13 @@
 
 namespace App\Services;
 
-use App\Repositories\PhonesRepository;
+use App\Repositories\Contracts\PhonesRepository;
 use App\Services\Contracts\PhonesInterface;
 use App\Models\Phones;
+use App\Services\Params\CreatePhoneServiceParams;
+use App\Services\Responses\ServiceResponse;
+use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class PhonesService implements PhonesInterface
 {
@@ -27,12 +31,12 @@ class PhonesService implements PhonesInterface
         try {
             $phone = $this->phonesRepository->find($id);
         } catch (ModelNotFoundException $e) {
-            return 'Telefone não encontrado';
+            return new ServiceResponse(false, 'Telefone não encontrado');
         } catch (Throwable $e) {
-            return $e;
+            return new ServiceResponse(false, $e->getMessage());
         }
 
-        return $phone;
+        return new ServiceResponse(true, 'Telefone encontrados', $phone);
     }
     /**
      * Traz todos contatos
@@ -44,23 +48,26 @@ class PhonesService implements PhonesInterface
         try {
             $phones = $this->phonesRepository->getAll();
         } catch (ModelNotFoundException $e) {
-            return 'Telefones não encontrado';
+            return new ServiceResponse(false, 'Telefones não encontrado');
         } catch (Throwable $e) {
-            return $e;
+            return new ServiceResponse(false, $e->getMessage());
         }
 
-        return $phones;
+        return new ServiceResponse(true, 'Telefones encontrados', $phones);
     }
 
-    public function store($request, $contactFk)
+    public function createPhone(CreatePhoneServiceParams $params)
     {
+        DB::beginTransaction();
         try {
-            $phone = $this->phonesRepository->store($request, $contactFk);
+            $phone = $this->phonesRepository->create($params->toArray());
         } catch (Throwable $e) {
-            return $e;
+            DB::rollback();
+            return new ServiceResponse(false, $e->getMessage());
         }
+        DB::commit();
 
-        return $phone;
+        return new ServiceResponse(true, 'Telefone criado com sucesso', $phone);
     }
 
     public function searchPhones($contactFk)
@@ -68,22 +75,25 @@ class PhonesService implements PhonesInterface
         try {
             $phones = $this->phonesRepository->getContactPhones($contactFk);
         } catch (ModelNotFoundException $e) {
-            return false;
+            return new ServiceResponse(false, 'Telefones não encontrados');
         } catch (Throwable $e) {
-            return $e;
+            return new ServiceResponse(false, $e->getMessage());
         }
 
-        return $phones;
+        return new ServiceResponse(true, 'Telefones encontrados', $phones);
     }
 
     public function deleteContactPhones($contactFk)
     {
+        DB::beginTransaction();
         try {
-            $phone = $this->phonesRepository->delete($contactFk);
+            $phone = $this->phonesRepository->deleteContactPhones($contactFk);
         } catch (Throwable $e) {
-            return $e;
+            DB::rollback();
+            return new ServiceResponse(false, $e->getMessage());
         }
+        DB::commit();
 
-        return $phone;
+        return new ServiceResponse(true, 'Telefones encontrados', $phone);
     }
 }

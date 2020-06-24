@@ -5,7 +5,7 @@ namespace App\Services\Params;
 use Carbon\Carbon;
 use App\Services\Params\BaseServiceParams;
 
-class CreateEmpresasPlanoServiceParams extends BaseServiceParams
+class CreateUserServiceParams extends BaseServiceParams
 {
     public $email;
     public $name;

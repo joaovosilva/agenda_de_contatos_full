@@ -47,8 +47,8 @@ function loadDataTable() {
                                 <span class="fa fa-th"></span>
                             </button>
                             <ul class="dropdown-menu" style="    transform: translate3d(800px, 170px, 0px) !important;">
-                                <!--<li><a href="javascript:void(0)" onclick="visualizeContact(`+ v.contact_id +`)">Visualizar</a></li>-->
-                                <li><a href="/contacts/`+ v.contact_id +`">Editar</a></li>
+                                <li><a href="javascript:void(0)" onclick="visualizeContact(`+ v.contact_id +`)">Visualizar</a></li>
+                                <li><a href="/contacts/`+ v.contact_id +`/edit">Editar</a></li>
                                 <li><a method="post" href="/contacts/`+ v.contact_id +`/delete">Excluir</a></li>
                             </ul>
                         </div>

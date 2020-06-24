@@ -4,13 +4,13 @@
             <!-- Menu -->
             <nav id="menu">
                 <header class="major">
-                    <h2>Menu</h2>
+                    <h2>@lang('app.menu')</h2>
                 </header>
                 <ul>
-                    <li><a href="{{route('contacts.index')}}">Meus Contatos</a></li>
-                    <li><a href="{{route('contacts.create')}}">Novo Contato</a></li>
+                    <li><a href="{{route('contacts.index')}}">@lang('app.my_contacts')</a></li>
+                    <li><a href="{{route('contacts.create')}}">@lang('app.new_contact')</a></li>
                     <li><a onclick="event.preventDefault();
-                            document.getElementById('logout-form').submit();">Logout</a></li>
+                            document.getElementById('logout-form').submit();">@lang('app.logout')</a></li>
                     <!-- <li><a href="">Generic</a></li>
                                 <li><a href="elements.php">Elements</a></li>
                                 <li>
@@ -28,7 +28,7 @@
             <!-- Section -->
             <section style="margin-top: 15% !important;">
                 <header class="major">
-                    <h2>Dev</h2>
+                    <h2>@lang('app.dev')</h2>
                 </header>
                 <ul class="contact">
                     <li class="icon solid fa-user">João Vitor Silva</li>

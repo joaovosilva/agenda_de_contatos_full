@@ -2,9 +2,12 @@
 
 namespace App\Services;
 
-use App\Repositories\AddressesRepository;
+use App\Repositories\Contracts\AddressesRepository;
 use App\Services\Contracts\AddressesInterface;
 use App\Models\Addresses;
+use App\Services\Params\CreateAddressServiceParams;
+use App\Services\Responses\ServiceResponse;
+use Illuminate\Support\Facades\DB;
 
 class AddressesService implements AddressesInterface
 {
@@ -27,12 +30,12 @@ class AddressesService implements AddressesInterface
         try {
             $address = $this->addressesRepository->find($id);
         } catch (ModelNotFoundException $e) {
-            return 'Endereço não encontrado';
+            return new ServiceResponse(false, 'Endereço não encontrado');
         } catch (Throwable $e) {
-            return $e;
+            return new ServiceResponse(false, $e->getMessage());
         }
 
-        return $address;
+        return new ServiceResponse(true, 'Endereço encontrado', $address);
     }
     /**
      * Traz todos contatos
@@ -44,46 +47,52 @@ class AddressesService implements AddressesInterface
         try {
             $addresses = $this->addressesRepository->getAll();
         } catch (ModelNotFoundException $e) {
-            return 'Endereços não encontrado';
+            return new ServiceResponse(false, 'Endereços não encontrado');
         } catch (Throwable $e) {
-            return $e;
+            return new ServiceResponse(false, $e->getMessage());
         }
 
-        return $addresses;
+        return new ServiceResponse(true, 'Endereços encontrados', $addresses);
     }
 
-    public function store($request, $contactFk)
+    public function createAddress(CreateAddressServiceParams $params)
     {
+        DB::beginTransaction();
         try {
-            $address = $this->addressesRepository->store($request, $contactFk);
+            $address = $this->addressesRepository->create($params->toArray());
         } catch (Throwable $e) {
-            return $e;
+            DB::rollback();
+            return new ServiceResponse(false, $e->getMessage());
         }
+        DB::commit();
 
-        return $address;
+        return new ServiceResponse(true, 'Endereço criado com sucesso', $address);
     }
 
     public function searchAddresses($contactFk)
     {
         try {
-            $phones = $this->addressesRepository->getContactAddresses($contactFk);
+            $addresses = $this->addressesRepository->getContactAddresses($contactFk);
         } catch (ModelNotFoundException $e) {
             return false;
         } catch (Throwable $e) {
-            return $e;
+            return new ServiceResponse(false, $e->getMessage());
         }
 
-        return $phones;
+        return new ServiceResponse(true, 'Endereços encontrados', $addresses);
     }
 
     public function deleteContactAddresses($contactFk)
     {
+        DB::beginTransaction();
         try {
-            $address = $this->addressesRepository->delete($contactFk);
+            $address = $this->addressesRepository->deleteContactAddresses($contactFk);
         } catch (Throwable $e) {
-            return $e;
+            DB::rollback();
+            return new ServiceResponse(false, $e->getMessage());
         }
+        DB::commit();
 
-        return $address;
+        return new ServiceResponse(true, 'Endereço deletado com sucesso', $address);
     }
 }

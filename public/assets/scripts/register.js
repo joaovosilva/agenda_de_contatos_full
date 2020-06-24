@@ -109,7 +109,7 @@ function addAddress() {
         $("#addressActions").append(minus);
         addressMinus = true;
     }
-    
+
     let html = '';
 
     html += '<div id="addressDiv' + addressesQuantity + '" style="border-top: solid 1px rgba(210, 215, 217, 0.75); margin-top: 20px;">';

@@ -2,10 +2,9 @@
 
 namespace App\Repositories;
 
-use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\AddressesRepository;
-use App\Entities\Addresses;
+use App\Repositories\Contracts\AddressesRepository;
+use App\Models\Addresses;
 use App\Validators\AddressesValidator;
 
 /**
@@ -13,7 +12,7 @@ use App\Validators\AddressesValidator;
  *
  * @package namespace App\Repositories;
  */
-class AddressesRepositoryEloquent extends BaseRepository implements AddressesRepository
+class AddressesRepositoryEloquent extends BaseRepositoryEloquent implements AddressesRepository
 {
     /**
      * Specify Model class name
@@ -25,13 +24,17 @@ class AddressesRepositoryEloquent extends BaseRepository implements AddressesRep
         return Addresses::class;
     }
 
-
-
-    /**
-     * Boot up the repository, pushing criteria
-     */
-    public function boot()
+    public function getContactAddresses($contactId)
     {
-        $this->pushCriteria(app(RequestCriteria::class));
+        return $this->model
+            ->where('contact_fk', $contactId)
+            ->get();
+    }
+
+    public function deleteContactAddresses($contactId)
+    {
+        return $this->model
+            ->where('contact_fk', $contactId)
+            ->delete();
     }
 }
