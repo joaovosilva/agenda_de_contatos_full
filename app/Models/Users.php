@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\CanResetPassword;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Users extends Authenticatable implements JWTSubject
+class Users extends Authenticatable implements JWTSubject, CanResetPassword
 {
     protected $table = 'tb_users';
     protected $primaryKey = 'user_id';
